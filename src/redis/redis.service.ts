@@ -91,9 +91,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   async registerSocket(socketId: string, roomId: string, session: SessionPayload): Promise<SocketJoinResult> {
     const activeUsersKey = roomActiveUsersKey(roomId);
     const socketKey = socketStateKey(socketId);
-    const existingCount = Number((await this.commandClient.hGet(activeUsersKey, session.username)) ?? '0');
-
-    await this.commandClient
+    const multiResult = await this.commandClient
       .multi()
       .hSet(socketKey, {
         roomId,
@@ -107,9 +105,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
       .hIncrBy(activeUsersKey, session.username, 1)
       .exec();
 
+    const incrementResult = Number(multiResult?.[3] ?? 0);
+
     return {
       activeUsers: await this.getActiveUsers(roomId),
-      firstSocketForUser: existingCount === 0,
+      firstSocketForUser: incrementResult === 1,
     };
   }
 
