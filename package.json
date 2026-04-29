@@ -9,6 +9,8 @@
     "start:dev": "nest start --watch",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
+    "drizzle:generate": "drizzle-kit generate --config drizzle.config.js --out ./drizzle/migrations",
+    "drizzle:push": "drizzle-kit push --config drizzle.config.js",
     "db:studio": "drizzle-kit studio",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
