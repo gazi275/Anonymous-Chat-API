@@ -1,5 +1,5 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { createClient, RedisClientType } from 'redis';
+import { createClient } from 'redis';
 
 import { env } from '../config/env.schema';
 import { APP_EVENTS_CHANNEL, roomActiveUsersKey, roomSocketSetKey, sessionKey, socketStateKey } from '../common/constants/redis-keys';
@@ -31,13 +31,15 @@ export interface SocketLeaveResult {
   lastSocketForUser: boolean;
 }
 
+type RedisClient = ReturnType<typeof createClient>;
+
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
-  private readonly commandClient = createClient({ url: env.REDIS_URL });
-  private readonly appPublisherClient = createClient({ url: env.REDIS_URL });
-  private readonly appSubscriberClient = createClient({ url: env.REDIS_URL });
-  private readonly socketPublisherClient = createClient({ url: env.REDIS_URL });
-  private readonly socketSubscriberClient = createClient({ url: env.REDIS_URL });
+  private readonly commandClient: RedisClient = createClient({ url: env.REDIS_URL });
+  private readonly appPublisherClient: RedisClient = createClient({ url: env.REDIS_URL });
+  private readonly appSubscriberClient: RedisClient = createClient({ url: env.REDIS_URL });
+  private readonly socketPublisherClient: RedisClient = createClient({ url: env.REDIS_URL });
+  private readonly socketSubscriberClient: RedisClient = createClient({ url: env.REDIS_URL });
 
   async onModuleInit(): Promise<void> {
     await Promise.all([
@@ -59,11 +61,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     ]);
   }
 
-  getSocketIoPublisherClient(): RedisClientType {
+  getSocketIoPublisherClient(): RedisClient {
     return this.socketPublisherClient;
   }
 
-  getSocketIoSubscriberClient(): RedisClientType {
+  getSocketIoSubscriberClient(): RedisClient {
     return this.socketSubscriberClient;
   }
 
@@ -170,7 +172,9 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     const multi = this.commandClient.multi();
     if (socketKeys.length > 0) {
-      multi.del(...socketKeys);
+      for (const socketKey of socketKeys) {
+        multi.del(socketKey);
+      }
     }
     multi.del(roomActiveUsersKey(roomId));
     multi.del(roomSocketSetKey(roomId));
