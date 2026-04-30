@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { RootController } from './root.controller';
 import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from './auth/auth.module';
@@ -21,5 +22,6 @@ import { RoomsModule } from './rooms/rooms.module';
     RoomsModule,
     RealtimeModule,
   ],
+  controllers: [RootController],
 })
 export class AppModule {}

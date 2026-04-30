@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, RequestMethod } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
@@ -22,7 +22,9 @@ async function bootstrap(): Promise<void> {
   const logger = new Logger('HTTP');
 
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api/v1', {
+    exclude: [{ path: '/', method: RequestMethod.GET }],
+  });
   app.useGlobalPipes(new ValidationPipe(createValidationPipeOptions()));
   app.useGlobalFilters(new ApiExceptionFilter());
   app.useGlobalInterceptors(new ResponseEnvelopeInterceptor());

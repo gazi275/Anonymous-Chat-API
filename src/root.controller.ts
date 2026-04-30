@@ -1,0 +1,9 @@
+import { Controller, Get } from '@nestjs/common';
+
+@Controller()
+export class RootController {
+  @Get()
+  health() {
+    return { status: 'ok', timestamp: new Date().toISOString() };
+  }
+}

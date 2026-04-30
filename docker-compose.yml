@@ -15,15 +15,23 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: anonymous_chat
+    # bind Postgres only to localhost to avoid public exposure
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   redis:
     image: redis:7-alpine
+    # bind Redis only to localhost to avoid public exposure
     ports:
-      - '6379:6379'
+      - '127.0.0.1:6379:6379'
 
 volumes:
   postgres_data:
