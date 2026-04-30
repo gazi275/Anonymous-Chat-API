@@ -23,10 +23,10 @@ RUN npm install
 COPY --from=build /app/dist ./dist
 COPY drizzle.config.ts ./
 COPY drizzle ./drizzle
+COPY docker-entrypoint.sh ./
 
-# Run migrations during startup
-RUN npx drizzle-kit push || true
+RUN chmod +x ./docker-entrypoint.sh
 
 EXPOSE 3000
 
-CMD ["node", "dist/main.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
