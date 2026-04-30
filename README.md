@@ -59,3 +59,41 @@ The API is available at `http://localhost:3000/api/v1`.
 Connect to `/chat?token=<sessionToken>&roomId=<roomId>`.
 
 Use `room:leave` to leave gracefully.
+
+📖 **Comprehensive WebSocket Documentation:** See [docs/WEBSOCKET_COMPLETE_FLOW.md](docs/WEBSOCKET_COMPLETE_FLOW.md)
+
+Quick reference: [docs/WEBSOCKET_QUICK_REFERENCE.md](docs/WEBSOCKET_QUICK_REFERENCE.md)
+
+## Documentation
+
+- **[EVENTS_SEND_VS_RECEIVE.md](docs/EVENTS_SEND_VS_RECEIVE.md)** — **START HERE!** Clear breakdown: which events to EMIT, which to LISTEN. With examples and decision tree.
+- **[WEBSOCKET_COMPLETE_FLOW.md](docs/WEBSOCKET_COMPLETE_FLOW.md)** — Full step-by-step flow from connection → joined → messages → disconnect. With Redis architecture and multi-instance scaling.
+- **[WEBSOCKET_QUICK_REFERENCE.md](docs/WEBSOCKET_QUICK_REFERENCE.md)** — One-page summary: events, payloads, error codes, checklist.
+- **[WEBSOCKET.md](docs/WEBSOCKET.md)** — Original technical spec: auth rules, event contract, troubleshooting.
+- **[CLIENT_IMPLEMENTATION.js](docs/CLIENT_IMPLEMENTATION.js)** — Ready-to-use JavaScript client with all event handlers and REST calls.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — System design overview.
+
+## API Contract
+
+Every response uses a consistent envelope:
+
+```json
+{
+  "success": true,
+  "data": { }
+}
+```
+
+or
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable description"
+  }
+}
+```
+
+See `src/common/filters/api-exception.filter.ts` and `src/common/interceptors/response-envelope.interceptor.ts`.
