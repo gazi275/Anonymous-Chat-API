@@ -12,6 +12,7 @@ import { RoomsModule } from './rooms/rooms.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       validate: (env) => envSchema.parse(env),
     }),
     DatabaseModule,
