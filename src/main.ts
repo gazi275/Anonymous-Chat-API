@@ -5,6 +5,8 @@ dotenv.config();
 
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
+import type { NextFunction, Request, Response } from 'express';
 
 import { AppModule } from './app.module';
 import { ApiExceptionFilter } from './common/filters/api-exception.filter';
@@ -17,12 +19,23 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
+  const logger = new Logger('HTTP');
 
   app.enableShutdownHooks();
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe(createValidationPipeOptions()));
   app.useGlobalFilters(new ApiExceptionFilter());
   app.useGlobalInterceptors(new ResponseEnvelopeInterceptor());
+  app.use((request: Request, response: Response, next: NextFunction) => {
+    const startedAt = Date.now();
+
+    response.on('finish', () => {
+      const duration = Date.now() - startedAt;
+      logger.log(`${request.method} ${request.originalUrl ?? request.url} ${response.statusCode} - ${duration}ms`);
+    });
+
+    next();
+  });
 
   await app.init();
 
