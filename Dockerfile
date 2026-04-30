@@ -7,6 +7,7 @@ RUN npm install
 
 COPY tsconfig.json tsconfig.build.json nest-cli.json drizzle.config.ts ./
 COPY src ./src
+COPY drizzle ./drizzle
 
 RUN npm run build
 
@@ -17,9 +18,14 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json* ./
-RUN npm install --omit=dev
+RUN npm install
 
 COPY --from=build /app/dist ./dist
+COPY drizzle.config.ts ./
+COPY drizzle ./drizzle
+
+# Run migrations during startup
+RUN npx drizzle-kit push || true
 
 EXPOSE 3000
 
