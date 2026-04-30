@@ -60,18 +60,16 @@ Connect to `/chat?token=<sessionToken>&roomId=<roomId>`.
 
 Use `room:leave` to leave gracefully.
 
-📖 **Comprehensive WebSocket Documentation:** See [docs/WEBSOCKET_COMPLETE_FLOW.md](docs/WEBSOCKET_COMPLETE_FLOW.md)
-
-Quick reference: [docs/WEBSOCKET_QUICK_REFERENCE.md](docs/WEBSOCKET_QUICK_REFERENCE.md)
-
 ## Documentation
 
-- **[EVENTS_SEND_VS_RECEIVE.md](docs/EVENTS_SEND_VS_RECEIVE.md)** — **START HERE!** Clear breakdown: which events to EMIT, which to LISTEN. With examples and decision tree.
-- **[WEBSOCKET_COMPLETE_FLOW.md](docs/WEBSOCKET_COMPLETE_FLOW.md)** — Full step-by-step flow from connection → joined → messages → disconnect. With Redis architecture and multi-instance scaling.
-- **[WEBSOCKET_QUICK_REFERENCE.md](docs/WEBSOCKET_QUICK_REFERENCE.md)** — One-page summary: events, payloads, error codes, checklist.
-- **[WEBSOCKET.md](docs/WEBSOCKET.md)** — Original technical spec: auth rules, event contract, troubleshooting.
-- **[CLIENT_IMPLEMENTATION.js](docs/CLIENT_IMPLEMENTATION.js)** — Ready-to-use JavaScript client with all event handlers and REST calls.
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** — System design overview.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — full system design, session strategy, Redis pub/sub fan-out, capacity guidance, scaling plan, and trade-offs.
+- **[README.md](README.md)** — setup instructions and local development quick start.
+- **[Postman collection](postman/Anonymous-Chat-API.postman_collection.json)** — ready-to-import API test collection.
+
+## Deployment
+
+- Public repository: https://github.com/gazi275/Anonymous-Chat-API.git
+- Deployed application: http://31.220.17.72:3000
 
 ## API Contract
 
